@@ -1,6 +1,3 @@
-[build]
-  publish = "/opt/build/repo/index.html"
-
 [[redirects]]
   from = "/*"
   to = "/index.html"
