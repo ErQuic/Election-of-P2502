@@ -1,6 +1,5 @@
 [build]
-  publish = "dist" # 替换为你的构建输出目录
-  functions = "functions" # 如果有Netlify Functions，指定目录
+  publish = "index.html"
 
 [[redirects]]
   from = "/*"
