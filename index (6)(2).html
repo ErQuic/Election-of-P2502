@@ -1,0 +1,1315 @@
+<html lang="zh-CN"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>政治2502第一届班委会选举暨第一届学生代表选举</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af', // 深蓝作为主色调，代表正式和信任
+                        secondary: '#3b82f6', // 中蓝作为辅助色
+                        accent: '#93c5fd', // 浅蓝作为强调色
+                        neutral: '#f1f5f9', // 浅灰作为中性色
+                        dark: '#0f172a', // 深色用于文本
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .transition-custom {
+                transition: all 0.3s ease;
+            }
+            .card-hover {
+                @apply hover:shadow-lg hover:-translate-y-1 transition-all duration-300;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 font-sans text-dark">
+    <!-- 导航栏 -->
+    <nav id="navbar" class="fixed w-full bg-white/90 backdrop-blur-sm shadow-sm z-50 transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <i class="fa fa-users text-primary text-2xl"></i>
+                <h1 class="text-xl font-bold text-primary">政治2502班</h1>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#application" class="nav-link font-medium hover:text-primary transition-custom">申请</a>
+                <a href="#applications-view" class="nav-link font-medium hover:text-primary transition-custom">申请情况</a>
+                <a href="#announcement" class="nav-link font-medium hover:text-primary transition-custom">公示</a>
+            </div>
+            
+            <!-- 管理员按钮 -->
+            <button id="adminBtn" class="hidden md:block px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-custom">
+                <i class="fa fa-cog mr-1"></i> 管理员
+            </button>
+            
+            <!-- 移动端菜单按钮 -->
+            <button id="menuBtn" class="md:hidden text-dark text-xl">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- 移动端菜单 -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-t">
+            <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+                <a href="#application" class="py-2 hover:text-primary transition-custom">申请</a>
+                <a href="#applications-view" class="py-2 hover:text-primary transition-custom">申请情况</a>
+                <a href="#announcement" class="py-2 hover:text-primary transition-custom">公示</a>
+                <button id="mobileAdminBtn" class="py-2 text-left text-primary">
+                    <i class="fa fa-cog mr-1"></i> 管理员
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 头部横幅 -->
+    <header class="pt-24 pb-16 bg-gradient-to-r from-primary to-secondary text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-[clamp(1.8rem,5vw,3rem)] font-bold mb-4 text-shadow">政治2502第一届班委会选举暨第一届学生代表选举</h1>
+            <p class="text-[clamp(1rem,2vw,1.25rem)] max-w-2xl mx-auto opacity-90">
+                公平、公正、公开地选举产生我们班级的第一届领导核心和学生代表，共同建设更好的政治2502班
+            </p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-12">
+        <!-- 申请页面 -->
+        <section id="application" class="mb-20 scroll-mt-24">
+            <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white mr-3">
+                        <i class="fa fa-pencil"></i>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-bold text-dark">申请成为班委或学生代表</h2>
+                </div>
+                
+                <!-- 申请截止时间提示 -->
+                <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-8 rounded-r-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fa fa-clock-o text-amber-500"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-amber-700">
+                                <strong>申请截止时间：</strong>2025年9月25日 12:00
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 申请表单 -->
+                <form id="applicationForm" class="space-y-8">
+                    <!-- 个人信息 -->
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-semibold text-gray-800 border-b pb-2">个人信息</h3>
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">姓名 <span class="text-red-500">*</span></label>
+                            <input type="text" id="name" name="name" required="" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-custom">
+                        </div>
+                    </div>
+                    
+                    <!-- 团支部职务 -->
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-semibold text-gray-800 border-b pb-2">团支部职务</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- 团支书 -->
+                            <div class="relative">
+                                <label class="flex flex-col p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-custom card-hover">
+                                    <div class="flex items-center mb-2">
+                                        <input type="checkbox" name="leaguePosition" value="团支书" class="mr-3 h-4 w-4 text-primary">
+                                        <span>团支书</span>
+                                    </div>
+                                    <div class="text-xs text-gray-500 position-description" data-position="团支书">
+                                        团支书负责团支部的全面工作，组织开展团的各项活动，传达党组织和上级团组织的指示和决议。
+                                        <button class="edit-desc text-primary ml-1 admin-only hidden">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <!-- 组织委员 -->
+                            <div class="relative">
+                                <label class="flex flex-col p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-custom card-hover">
+                                    <div class="flex items-center mb-2">
+                                        <input type="checkbox" name="leaguePosition" value="组织委员" class="mr-3 h-4 w-4 text-primary">
+                                        <span>组织委员</span>
+                                    </div>
+                                    <div class="text-xs text-gray-500 position-description" data-position="组织委员">
+                                        组织委员负责团支部的组织建设工作，包括发展新团员、收缴团费、组织团内活动和会议等。
+                                        <button class="edit-desc text-primary ml-1 admin-only hidden">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <!-- 宣传委员 -->
+                            <div class="relative">
+                                <label class="flex flex-col p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-custom card-hover">
+                                    <div class="flex items-center mb-2">
+                                        <input type="checkbox" name="leaguePosition" value="宣传委员" class="mr-3 h-4 w-4 text-primary">
+                                        <span>宣传委员</span>
+                                    </div>
+                                    <div class="text-xs text-gray-500 position-description" data-position="宣传委员">
+                                        宣传委员负责团支部的宣传工作，包括宣传党的路线方针政策、组织学习活动、管理班级宣传阵地等。
+                                        <button class="edit-desc text-primary ml-1 admin-only hidden">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 班委职务 -->
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-semibold text-gray-800 border-b pb-2">班委职务</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            <!-- 班长 -->
+                            <div class="relative">
+                                <label class="flex flex-col p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-custom card-hover">
+                                    <div class="flex items-center mb-2">
+                                        <input type="checkbox" name="classPosition" value="班长" class="mr-3 h-4 w-4 text-primary">
+                                        <span>班长</span>
+                                    </div>
+                                    <div class="text-xs text-gray-500 position-description" data-position="班长">
+                                        班级实行一把手负责制，班长负责总调度。
+                                        <button class="edit-desc text-primary ml-1 admin-only hidden">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <!-- 副班长 -->
+                            <div class="relative">
+                                <label class="flex flex-col p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-custom card-hover">
+                                    <div class="flex items-center mb-2">
+                                        <input type="checkbox" name="classPosition" value="副班长" class="mr-3 h-4 w-4 text-primary">
+                                        <span>副班长</span>
+                                    </div>
+                                    <div class="text-xs text-gray-500 position-description" data-position="副班长">
+                                        副班长协助班长工作，在班长不在时代理班长职责，分管部分班级工作，协调相关事务。
+                                        <button class="edit-desc text-primary ml-1 admin-only hidden">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <!-- 学习委员 -->
+                            <div class="relative">
+                                <label class="flex flex-col p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-custom card-hover">
+                                    <div class="flex items-center mb-2">
+                                        <input type="checkbox" name="classPosition" value="学习委员" class="mr-3 h-4 w-4 text-primary">
+                                        <span>学习委员</span>
+                                    </div>
+                                    <div class="text-xs text-gray-500 position-description" data-position="学习委员">
+                                        学习。
+                                        <button class="edit-desc text-primary ml-1 admin-only hidden">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <!-- 文艺委员 -->
+                            <div class="relative">
+                                <label class="flex flex-col p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-custom card-hover">
+                                    <div class="flex items-center mb-2">
+                                        <input type="checkbox" name="classPosition" value="文艺委员" class="mr-3 h-4 w-4 text-primary">
+                                        <span>文艺委员</span>
+                                    </div>
+                                    <div class="text-xs text-gray-500 position-description" data-position="文艺委员">
+                                        负责组织班级文艺活动，如之后的一二·九文艺大赛等，丰富同学们的文化生活。
+                                        <button class="edit-desc text-primary ml-1 admin-only hidden">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <!-- 体育委员 -->
+                            <div class="relative">
+                                <label class="flex flex-col p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-custom card-hover">
+                                    <div class="flex items-center mb-2">
+                                        <input type="checkbox" name="classPosition" value="体育委员" class="mr-3 h-4 w-4 text-primary">
+                                        <span>体育委员</span>
+                                    </div>
+                                    <div class="text-xs text-gray-500 position-description" data-position="体育委员">
+                                        体育委员负责组织班级体育活动，如运动会、班级特色运动活动等，带动班级同学参与共同运动。
+                                        <button class="edit-desc text-primary ml-1 admin-only hidden">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <!-- 生活委员 -->
+                            <div class="relative">
+                                <label class="flex flex-col p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-custom card-hover">
+                                    <div class="flex items-center mb-2">
+                                        <input type="checkbox" name="classPosition" value="生活委员" class="mr-3 h-4 w-4 text-primary">
+                                        <span>生活委员</span>
+                                    </div>
+                                    <div class="text-xs text-gray-500 position-description" data-position="生活委员">
+                                        男女各一名。
+                                        <button class="edit-desc text-primary ml-1 admin-only hidden">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <!-- 心理委员 -->
+                            <div class="relative">
+                                <label class="flex flex-col p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-custom card-hover">
+                                    <div class="flex items-center mb-2">
+                                        <input type="checkbox" name="classPosition" value="心理委员" class="mr-3 h-4 w-4 text-primary">
+                                        <span>心理委员</span>
+                                    </div>
+                                    <div class="text-xs text-gray-500 position-description" data-position="心理委员">
+                                        负责关注同学心理健康状况，组织心理健康活动，协助老师开展心理辅导工作。
+                                        <button class="edit-desc text-primary ml-1 admin-only hidden">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 学生代表 -->
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-semibold text-gray-800 border-b pb-2">学生代表</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- 学生代表 -->
+                            <div class="relative">
+                                <label class="flex flex-col p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-custom card-hover">
+                                    <div class="flex items-center mb-2">
+                                        <input type="checkbox" name="studentRepresentative" value="学生代表" class="mr-3 h-4 w-4 text-primary">
+                                        <span>学生代表</span>
+                                    </div>
+                                    <div class="text-xs text-gray-500 position-description" data-position="学生代表">
+                                        参加第一届学生代表大会。
+                                        <button class="edit-desc text-primary ml-1 admin-only hidden">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 接受调剂 -->
+                    <div>
+                        <label class="flex items-center">
+                            <input type="checkbox" id="adjustment" name="adjustment" class="mr-3 h-4 w-4 text-primary">
+                            <span>我接受调剂到其他适合的职务</span>
+                        </label>
+                    </div>
+                    
+                    <!-- 提交按钮 -->
+                    <div class="pt-4">
+                        <button type="submit" id="submitApplication" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-custom font-medium">
+                            提交申请
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+        
+        <!-- 申请情况页面 -->
+        <section id="applications-view" class="mb-20 scroll-mt-24">
+            <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white mr-3">
+                        <i class="fa fa-list-alt"></i>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-bold text-dark">申请情况</h2>
+                </div>
+                
+                <!-- 管理员操作区 -->
+                <div id="adminApplicationsActions" class="hidden admin-only bg-gray-50 p-6 rounded-lg mb-8 border border-gray-200">
+                    <h3 class="text-xl font-semibold mb-4">管理员操作</h3>
+                    <div class="flex flex-wrap gap-4">
+                        <button id="exportApplicationsBtn" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-custom">
+                            <i class="fa fa-download mr-1"></i> 导出申请数据
+                        </button>
+                        <button id="clearApplicationsBtn" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-custom">
+                            <i class="fa fa-trash mr-1"></i> 清空申请数据
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 申请统计图表 -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold mb-4">各职务申请人数统计</h3>
+                    <div class="h-80">
+                        <canvas id="applicationsChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- 管理员查看的申请列表 -->
+                <div id="adminApplicationsList" class="hidden admin-only space-y-6">
+                    <h3 class="text-xl font-semibold mb-4">申请详情列表</h3>
+                    <!-- 申请列表将通过JavaScript动态生成 -->
+                    <div class="text-center py-12 text-gray-500" id="noApplicationsMessage">
+                        <i class="fa fa-file-text-o text-4xl mb-4"></i>
+                        <p>暂无申请记录</p>
+                    </div>
+                </div>
+                
+                <!-- 普通用户查看的申请统计 -->
+                <div id="normalApplicationsStats" class="space-y-6">
+                    <h3 class="text-xl font-semibold mb-4">各职务申请人数</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="positionsStats">
+                        <!-- 统计数据将通过JavaScript动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 公示页面 -->
+        <section id="announcement" class="scroll-mt-24">
+            <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white mr-3">
+                        <i class="fa fa-bullhorn"></i>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-bold text-dark">公示公告</h2>
+                </div>
+                
+                <!-- 管理员上传区域 -->
+                <div id="announcementUpload" class="hidden admin-only bg-gray-50 p-6 rounded-lg mb-8 border border-gray-200">
+                    <h3 class="text-xl font-semibold mb-4">发布公示</h3>
+                    <form id="announcementForm" class="space-y-4">
+                        <div>
+                            <label for="announcementTitle" class="block text-sm font-medium text-gray-700 mb-1">标题</label>
+                            <input type="text" id="announcementTitle" name="announcementTitle" required="" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-custom">
+                        </div>
+                        
+                        <div>
+                            <label for="announcementContent" class="block text-sm font-medium text-gray-700 mb-1">内容</label>
+                            <textarea id="announcementContent" name="announcementContent" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-custom"></textarea>
+                        </div>
+                        
+                        <div>
+                            <label for="announcementFile" class="block text-sm font-medium text-gray-700 mb-1">上传文件（可选）</label>
+                            <input type="file" id="announcementFile" name="announcementFile" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                        
+                        <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-custom">
+                            发布公示
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- 公示列表 -->
+                <div id="announcementsList" class="space-y-6">
+                    <!-- 公示内容将通过JavaScript动态生成 -->
+                    <div class="text-center py-12 text-gray-500">
+                        <i class="fa fa-file-text-o text-4xl mb-4"></i>
+                        <p>暂无公示内容</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-2">政治2502班</h3>
+                    <p class="text-gray-400">第一届班委会选举暨第一届学生代表选举系统</p>
+                </div>
+                
+                <div class="text-gray-400 text-sm">
+                    <p>© 2025 政治2502班 版权所有</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 管理员登录模态框 -->
+    <div id="adminLoginModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-xl p-6 w-full max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">管理员登录</h3>
+                <button id="closeLoginModal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="adminLoginForm" class="space-y-4">
+                <div>
+                    <label for="adminPassword" class="block text-sm font-medium text-gray-700 mb-1">管理员密码</label>
+                    <input type="password" id="adminPassword" name="adminPassword" required="" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-custom">
+                </div>
+                
+                <button type="submit" class="w-full px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-custom">
+                    登录
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 成功提示模态框 -->
+    <div id="successModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-xl p-6 w-full max-w-md text-center">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fa fa-check text-2xl text-green-500"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">操作成功</h3>
+            <p id="successMessage" class="text-gray-600 mb-6">您的操作已成功完成</p>
+            <button id="closeSuccessModal" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-custom">
+                确定
+            </button>
+        </div>
+    </div>
+
+    <!-- 编辑职务描述模态框 -->
+    <div id="editDescModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-xl p-6 w-full max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">编辑职务描述</h3>
+                <button id="closeEditDescModal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="editDescForm" class="space-y-4">
+                <input type="hidden" id="descPosition" name="descPosition">
+                <div>
+                    <label for="positionDesc" class="block text-sm font-medium text-gray-700 mb-1">职务描述</label>
+                    <textarea id="positionDesc" name="positionDesc" rows="4" required="" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-custom"></textarea>
+                </div>
+                
+                <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-custom">
+                    保存
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 模拟数据存储
+        const electionData = {
+            // 存储申请数据
+            applications: [],
+            // 存储职务描述
+            positionDescriptions: {
+                "团支书": "团支书负责团支部的全面工作，组织开展团的各项活动，传达党组织和上级团组织的指示和决议。",
+                "组织委员": "组织委员负责团支部的组织建设工作，包括发展新团员、收缴团费、组织团内活动和会议等。",
+                "宣传委员": "宣传委员负责团支部的宣传工作，包括宣传党的路线方针政策、组织学习活动、管理班级宣传阵地等。",
+                "班长": "班级实行一把手负责制，班长负责总调度。",
+                "副班长": "副班长协助班长工作，在班长不在时代理班长职责，分管部分班级工作，协调相关事务。",
+                "学习委员": "学习。",
+                "文艺委员": "负责组织班级文艺活动，如之后的一二·九文艺大赛等，丰富同学们的文化生活。",
+                "体育委员": "体育委员负责组织班级体育活动，如运动会、班级特色运动活动等，带动班级同学参与共同运动。",
+                "生活委员": "男女各一名。",
+                "心理委员": "负责关注同学心理健康状况，组织心理健康活动，协助老师开展心理辅导工作。",
+                "学生代表": "参加第一届学生代表大会。"
+            },
+            // 存储公示数据
+            announcements: [],
+            // 管理员密码 (实际应用中应加密存储)
+            adminPassword: 'admin123'
+        };
+
+        // 检查本地存储中是否有数据
+        function loadDataFromLocalStorage() {
+            const savedData = localStorage.getItem('electionData');
+            if (savedData) {
+                const parsedData = JSON.parse(savedData);
+                // 合并保存的数据
+                Object.assign(electionData, parsedData);
+                // 更新页面上的职务描述
+                updatePositionDescriptionsOnPage();
+            }
+        }
+
+        // 保存数据到本地存储
+        function saveDataToLocalStorage() {
+            localStorage.setItem('electionData', JSON.stringify(electionData));
+        }
+
+        // 更新页面上的职务描述
+        function updatePositionDescriptionsOnPage() {
+            for (const [position, desc] of Object.entries(electionData.positionDescriptions)) {
+                const descElements = document.querySelectorAll(`.position-description[data-position="${position}"]`);
+                descElements.forEach(el => {
+                    // 保留编辑按钮，只更新描述文本
+                    const editButton = el.querySelector('.edit-desc');
+                    el.innerHTML = desc;
+                    if (editButton) {
+                        el.appendChild(editButton);
+                    }
+                });
+            }
+        }
+
+        // 初始化页面
+        function init() {
+            // 加载保存的数据
+            loadDataFromLocalStorage();
+            
+            // 初始化导航
+            initNavigation();
+            
+            // 初始化申请表单
+            initApplicationForm();
+            
+            // 初始化职务描述编辑功能
+            initPositionDescriptions();
+            
+            // 初始化申请情况页面
+            initApplicationsView();
+            
+            // 初始化公示区域
+            initAnnouncements();
+            
+            // 初始化管理员功能
+            initAdminFunctions();
+            
+            // 清除可能残留的登录状态，确保初始状态正确
+            localStorage.removeItem('isAdminLoggedIn');
+            
+            // 检查管理员登录状态（现在会从干净状态开始）
+            checkAdminLogin();
+        }
+
+        // 初始化导航
+        function initNavigation() {
+            // 移动端菜单切换
+            const menuBtn = document.getElementById('menuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // 导航栏滚动效果
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('py-2', 'shadow');
+                    navbar.classList.remove('py-3');
+                } else {
+                    navbar.classList.add('py-3');
+                    navbar.classList.remove('py-2', 'shadow');
+                }
+            });
+            
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    // 关闭移动菜单
+                    mobileMenu.classList.add('hidden');
+                    
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        }
+
+        // 初始化申请表单
+        function initApplicationForm() {
+            const form = document.getElementById('applicationForm');
+            const submitBtn = document.getElementById('submitApplication');
+            
+            // 检查申请是否已截止
+            const deadline = new Date('2025-09-25T12:00:00');
+            const now = new Date();
+            
+            if (now > deadline) {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+                submitBtn.classList.remove('bg-primary', 'hover:bg-primary/90');
+                
+                // 显示申请已截止提示
+                const deadlineAlert = document.createElement('div');
+                deadlineAlert.className = 'bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg mt-4';
+                deadlineAlert.innerHTML = `
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fa fa-exclamation-circle text-red-500"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-red-700">
+                                申请已截止，感谢您的参与！
+                            </p>
+                        </div>
+                    </div>
+                `;
+                form.parentNode.insertBefore(deadlineAlert, form.nextSibling);
+                
+                // 禁用表单所有输入
+                form.querySelectorAll('input, textarea, select, button').forEach(el => {
+                    el.disabled = true;
+                });
+            }
+            
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const name = document.getElementById('name').value.trim();
+                // 获取选中的团支部职务（可多选）
+                const leaguePositions = Array.from(document.querySelectorAll('input[name="leaguePosition"]:checked')).map(input => input.value);
+                // 获取选中的班委职务（可多选）
+                const classPositions = Array.from(document.querySelectorAll('input[name="classPosition"]:checked')).map(input => input.value);
+                // 学生代表
+                const isStudentRep = document.querySelector('input[name="studentRepresentative"]:checked') !== null;
+                const adjustment = document.getElementById('adjustment').checked;
+                
+                if (!name) {
+                    alert('请输入您的姓名');
+                    return;
+                }
+                
+                // 检查是否至少选择了一个职务或学生代表
+                if (leaguePositions.length === 0 && classPositions.length === 0 && !isStudentRep) {
+                    alert('请至少选择一个职务或学生代表');
+                    return;
+                }
+                
+                // 收集选择的职位
+                const positions = [...leaguePositions, ...classPositions];
+                if (isStudentRep) positions.push('学生代表');
+                
+                // 检查是否已申请过这些职位组合
+                const existingApplication = electionData.applications.find(app => 
+                    app.name === name && 
+                    JSON.stringify(app.positions.sort()) === JSON.stringify(positions.sort())
+                );
+                
+                if (existingApplication) {
+                    alert('您已经申请过这些职位组合');
+                    return;
+                }
+                
+                // 添加新申请
+                const newApplication = {
+                    id: Date.now(),
+                    name,
+                    positions,
+                    adjustment,
+                    timestamp: new Date().toISOString()
+                };
+                
+                electionData.applications.push(newApplication);
+                saveDataToLocalStorage();
+                
+                // 重置表单
+                form.reset();
+                
+                // 显示成功提示
+                showSuccessModal('申请提交成功！');
+                
+                // 更新申请情况
+                updateApplicationsView();
+            });
+        }
+
+        // 初始化职务描述编辑功能
+        function initPositionDescriptions() {
+            // 为所有编辑按钮添加事件监听
+            document.querySelectorAll('.edit-desc').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const descElement = button.closest('.position-description');
+                    const position = descElement.dataset.position;
+                    const currentDesc = electionData.positionDescriptions[position] || '';
+                    
+                    openEditDescModal(position, currentDesc);
+                });
+            });
+        }
+
+        // 打开编辑职务描述模态框
+        function openEditDescModal(position, description) {
+            const modal = document.getElementById('editDescModal');
+            const positionInput = document.getElementById('descPosition');
+            const descInput = document.getElementById('positionDesc');
+            
+            positionInput.value = position;
+            descInput.value = description;
+            
+            modal.classList.remove('hidden');
+        }
+
+        // 初始化申请情况页面
+        function initApplicationsView() {
+            // 初始化图表
+            initApplicationsChart();
+            
+            // 更新申请情况显示
+            updateApplicationsView();
+            
+            // 导出申请数据按钮
+            document.getElementById('exportApplicationsBtn').addEventListener('click', exportApplicationsData);
+            
+            // 清空申请数据按钮
+            document.getElementById('clearApplicationsBtn').addEventListener('click', () => {
+                if (confirm('确定要清空所有申请数据吗？此操作不可恢复！')) {
+                    electionData.applications = [];
+                    saveDataToLocalStorage();
+                    updateApplicationsView();
+                    showSuccessModal('申请数据已清空');
+                }
+            });
+        }
+
+        // 初始化申请统计图表
+        function initApplicationsChart() {
+            const ctx = document.getElementById('applicationsChart').getContext('2d');
+            
+            // 定义所有职务
+            const allPositions = [
+                '团支书', '组织委员', '宣传委员',
+                '班长', '副班长', '学习委员', '文艺委员',
+                '体育委员', '生活委员', '心理委员', '学生代表'
+            ];
+            
+            // 更新图表数据
+            function updateChartData() {
+                // 统计各职务的申请人数
+                const positionCounts = {};
+                allPositions.forEach(position => {
+                    positionCounts[position] = 0;
+                });
+                
+                // 统计每个职务有多少人申请
+                electionData.applications.forEach(application => {
+                    application.positions.forEach(position => {
+                        if (positionCounts[position] !== undefined) {
+                            positionCounts[position]++;
+                        }
+                    });
+                });
+                
+                // 准备图表数据
+                const labels = allPositions;
+                const data = labels.map(position => positionCounts[position]);
+                
+                return { labels, data };
+            }
+            
+            // 创建图表
+            const applicationsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: updateChartData().labels,
+                    datasets: [{
+                        label: '申请人数',
+                        data: updateChartData().data,
+                        backgroundColor: 'rgba(30, 64, 175, 0.7)',
+                        borderColor: 'rgba(30, 64, 175, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            },
+                            title: {
+                                display: true,
+                                text: '申请人数'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '职务'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `申请人数: ${context.raw}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 提供更新图表的方法
+            window.updateApplicationsChart = function() {
+                const newData = updateChartData();
+                applicationsChart.data.labels = newData.labels;
+                applicationsChart.data.datasets[0].data = newData.data;
+                applicationsChart.update();
+            };
+        }
+
+        // 更新申请情况显示
+        function updateApplicationsView() {
+            // 更新图表
+            if (window.updateApplicationsChart) {
+                window.updateApplicationsChart();
+            }
+            
+            // 更新普通用户的统计数据
+            updateNormalUserStats();
+            
+            // 更新管理员的申请列表
+            updateAdminApplicationsList();
+        }
+
+        // 更新普通用户的统计数据
+        function updateNormalUserStats() {
+            const statsContainer = document.getElementById('positionsStats');
+            statsContainer.innerHTML = '';
+            
+            // 定义所有职务
+            const allPositions = [
+                '团支书', '组织委员', '宣传委员',
+                '班长', '副班长', '学习委员', '文艺委员',
+                '体育委员', '生活委员', '心理委员', '学生代表'
+            ];
+            
+            // 统计各职务的申请人数
+            const positionCounts = {};
+            allPositions.forEach(position => {
+                positionCounts[position] = 0;
+            });
+            
+            // 统计每个职务有多少人申请
+            electionData.applications.forEach(application => {
+                application.positions.forEach(position => {
+                    if (positionCounts[position] !== undefined) {
+                        positionCounts[position]++;
+                    }
+                });
+            });
+            
+            // 创建统计卡片
+            allPositions.forEach(position => {
+                const count = positionCounts[position];
+                const statCard = document.createElement('div');
+                statCard.className = 'border rounded-lg p-4';
+                
+                statCard.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">${position}</span>
+                        <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">${count} 人</span>
+                    </div>
+                `;
+                
+                statsContainer.appendChild(statCard);
+            });
+        }
+
+        // 更新管理员的申请列表
+        function updateAdminApplicationsList() {
+            const listContainer = document.getElementById('adminApplicationsList');
+            const noApplicationsMessage = document.getElementById('noApplicationsMessage');
+            
+            if (electionData.applications.length === 0) {
+                noApplicationsMessage.classList.remove('hidden');
+                listContainer.innerHTML = '';
+                return;
+            }
+            
+            noApplicationsMessage.classList.add('hidden');
+            
+            // 按时间倒序排列（最新的在前）
+            const sortedApplications = [...electionData.applications]
+                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            listContainer.innerHTML = '';
+            
+            sortedApplications.forEach(application => {
+                const applicationCard = document.createElement('div');
+                applicationCard.className = 'border rounded-lg p-5 card-hover';
+                
+                applicationCard.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 class="text-xl font-semibold">${application.name}</h3>
+                        <span class="text-sm text-gray-500">${formatDateTime(new Date(application.timestamp))}</span>
+                    </div>
+                    <div class="mb-3">
+                        <p class="text-sm font-medium mb-2">申请职务：</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${application.positions.map(position => 
+                                `<span class="px-3 py-1 bg-gray-100 rounded-full text-sm">${position}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <p class="text-sm">
+                            <i class="fa fa-exchange text-gray-500 mr-1"></i>
+                            接受调剂：${application.adjustment ? '是' : '否'}
+                        </p>
+                    </div>
+                    <div class="mt-4 flex justify-end">
+                        <button class="text-red-500 hover:text-red-700 delete-application" data-id="${application.id}">
+                            <i class="fa fa-trash-o mr-1"></i> 删除
+                        </button>
+                    </div>
+                `;
+                
+                listContainer.appendChild(applicationCard);
+            });
+            
+            // 为删除按钮添加事件监听 - 修复无法删除的bug
+            document.querySelectorAll('.delete-application').forEach(button => {
+                // 先移除可能存在的事件监听，避免重复绑定
+                const newButton = button.cloneNode(true);
+                button.parentNode.replaceChild(newButton, button);
+                
+                // 添加新的事件监听
+                newButton.addEventListener('click', function() {
+                    const id = parseInt(this.dataset.id);
+                    if (confirm('确定要删除这条申请吗？')) {
+                        // 过滤掉要删除的申请
+                        electionData.applications = electionData.applications.filter(a => a.id !== id);
+                        // 保存数据
+                        saveDataToLocalStorage();
+                        // 更新显示
+                        updateApplicationsView();
+                        // 显示成功提示
+                        showSuccessModal('申请已成功删除');
+                    }
+                });
+            });
+        }
+
+        // 导出申请数据
+        function exportApplicationsData() {
+            if (electionData.applications.length === 0) {
+                alert('没有申请数据可导出');
+                return;
+            }
+            
+            // 准备CSV数据
+            let csvContent = "姓名,申请职务,接受调剂,申请时间\n";
+            
+            electionData.applications.forEach(application => {
+                const name = application.name;
+                const positions = application.positions.join(';');
+                const adjustment = application.adjustment ? '是' : '否';
+                const time = formatDateTime(new Date(application.timestamp));
+                
+                csvContent += `${name},${positions},${adjustment},${time}\n`;
+            });
+            
+            // 创建下载链接
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', `政治2502班班委申请数据_${new Date().toLocaleDateString()}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showSuccessModal('申请数据已导出');
+        }
+
+        // 初始化公示区域
+        function initAnnouncements() {
+            const announcementsList = document.getElementById('announcementsList');
+            const announcementForm = document.getElementById('announcementForm');
+            
+            // 加载已发布的公示
+            loadAnnouncements();
+            
+            // 公示表单提交
+            announcementForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const title = document.getElementById('announcementTitle').value.trim();
+                const content = document.getElementById('announcementContent').value.trim();
+                const fileInput = document.getElementById('announcementFile');
+                
+                if (!title) {
+                    alert('请输入公示标题');
+                    return;
+                }
+                
+                // 处理文件（模拟，实际应用中应上传到服务器）
+                let fileName = null;
+                if (fileInput.files.length > 0) {
+                    fileName = fileInput.files[0].name;
+                    // 在实际应用中，这里应该有文件上传逻辑
+                }
+                
+                // 创建新公示
+                const newAnnouncement = {
+                    id: Date.now(),
+                    title,
+                    content,
+                    fileName,
+                    timestamp: new Date().toISOString()
+                };
+                
+                electionData.announcements.unshift(newAnnouncement); // 添加到开头
+                saveDataToLocalStorage();
+                
+                // 重置表单
+                announcementForm.reset();
+                
+                // 重新加载公示列表
+                loadAnnouncements();
+                
+                showSuccessModal('公示发布成功');
+            });
+        }
+
+        // 加载公示列表
+        function loadAnnouncements() {
+            const announcementsList = document.getElementById('announcementsList');
+            
+            if (electionData.announcements.length === 0) {
+                announcementsList.innerHTML = `
+                    <div class="text-center py-12 text-gray-500">
+                        <i class="fa fa-file-text-o text-4xl mb-4"></i>
+                        <p>暂无公示内容</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            announcementsList.innerHTML = '';
+            
+            electionData.announcements.forEach(announcement => {
+                const announcementCard = document.createElement('div');
+                announcementCard.className = 'border rounded-lg p-5 card-hover';
+                
+                let fileHtml = '';
+                if (announcement.fileName) {
+                    fileHtml = `
+                        <div class="mt-3 flex items-center text-primary">
+                            <i class="fa fa-file-o mr-2"></i>
+                            <a href="#" class="hover:underline">${announcement.fileName}</a>
+                        </div>
+                    `;
+                }
+                
+                announcementCard.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 class="text-xl font-semibold">${announcement.title}</h3>
+                        <span class="text-sm text-gray-500">${formatDateTime(new Date(announcement.timestamp))}</span>
+                    </div>
+                    <div class="text-gray-700 mb-3">${announcement.content ? announcement.content : '<p>无详细内容</p>'}</div>
+                    ${fileHtml}
+                    <div class="mt-4 flex justify-end space-x-2 admin-only">
+                        <button class="text-red-500 hover:text-red-700 delete-announcement" data-id="${announcement.id}">
+                            <i class="fa fa-trash-o"></i> 删除
+                        </button>
+                    </div>
+                `;
+                
+                announcementsList.appendChild(announcementCard);
+            });
+            
+            // 添加删除事件监听
+            document.querySelectorAll('.delete-announcement').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const id = parseInt(e.target.closest('button').dataset.id);
+                    if (confirm('确定要删除这条公示吗？')) {
+                        electionData.announcements = electionData.announcements.filter(a => a.id !== id);
+                        saveDataToLocalStorage();
+                        loadAnnouncements();
+                    }
+                });
+            });
+        }
+
+        // 初始化管理员功能
+        function initAdminFunctions() {
+            const adminBtns = [
+                document.getElementById('adminBtn'),
+                document.getElementById('mobileAdminBtn')
+            ];
+            const adminLoginModal = document.getElementById('adminLoginModal');
+            const closeLoginModal = document.getElementById('closeLoginModal');
+            const adminLoginForm = document.getElementById('adminLoginForm');
+            const editDescForm = document.getElementById('editDescForm');
+            const closeEditDescModal = document.getElementById('closeEditDescModal');
+            
+            // 打开管理员登录模态框
+            adminBtns.forEach(btn => {
+                if (btn) {
+                    btn.addEventListener('click', () => {
+                        adminLoginModal.classList.remove('hidden');
+                    });
+                }
+            });
+            
+            // 关闭管理员登录模态框
+            closeLoginModal.addEventListener('click', () => {
+                adminLoginModal.classList.add('hidden');
+            });
+            
+            // 管理员登录表单提交
+            adminLoginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const password = document.getElementById('adminPassword').value;
+                
+                if (password === electionData.adminPassword) {
+                    // 登录成功，保存状态
+                    localStorage.setItem('isAdminLoggedIn', 'true');
+                    adminLoginModal.classList.add('hidden');
+                    adminLoginForm.reset();
+                    
+                    // 显示管理员功能
+                    showAdminFunctions();
+                    
+                    showSuccessModal('管理员登录成功');
+                } else {
+                    alert('密码错误，请重试');
+                }
+            });
+            
+            // 关闭编辑描述模态框
+            closeEditDescModal.addEventListener('click', () => {
+                document.getElementById('editDescModal').classList.add('hidden');
+            });
+            
+            // 编辑描述表单提交
+            editDescForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const position = document.getElementById('descPosition').value;
+                const description = document.getElementById('positionDesc').value.trim();
+                
+                if (!description) {
+                    alert('请输入职务描述');
+                    return;
+                }
+                
+                // 更新数据中的职务描述
+                electionData.positionDescriptions[position] = description;
+                saveDataToLocalStorage();
+                
+                // 更新页面上的描述
+                updatePositionDescriptionsOnPage();
+                
+                document.getElementById('editDescModal').classList.add('hidden');
+                showSuccessModal('职务描述更新成功');
+            });
+            
+            // 点击模态框外部关闭
+            window.addEventListener('click', (e) => {
+                if (e.target === adminLoginModal) {
+                    adminLoginModal.classList.add('hidden');
+                }
+                if (e.target === document.getElementById('editDescModal')) {
+                    document.getElementById('editDescModal').classList.add('hidden');
+                }
+                if (e.target === document.getElementById('successModal')) {
+                    document.getElementById('successModal').classList.add('hidden');
+                }
+            });
+        }
+
+        // 检查管理员登录状态
+        function checkAdminLogin() {
+            // 明确检查登录状态，只有确实登录了才显示管理员功能
+            const isLoggedIn = localStorage.getItem('isAdminLoggedIn') === 'true';
+            if (isLoggedIn) {
+                showAdminFunctions();
+            } else {
+                // 确保未登录时隐藏所有管理员功能
+                document.querySelectorAll('.admin-only').forEach(el => {
+                    el.classList.add('hidden');
+                });
+            }
+        }
+
+        // 显示管理员功能
+        function showAdminFunctions() {
+            document.querySelectorAll('.admin-only').forEach(el => {
+                el.classList.remove('hidden');
+            });
+            
+            // 显示编辑按钮
+            document.querySelectorAll('.edit-desc').forEach(btn => {
+                btn.classList.remove('hidden');
+            });
+            
+            // 更新申请列表
+            updateApplicationsView();
+        }
+
+        // 显示成功提示模态框
+        function showSuccessModal(message) {
+            const modal = document.getElementById('successModal');
+            const messageElement = document.getElementById('successMessage');
+            
+            messageElement.textContent = message;
+            modal.classList.remove('hidden');
+            
+            // 5秒后自动关闭
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 5000);
+        }
+
+        // 关闭成功提示模态框
+        document.getElementById('closeSuccessModal').addEventListener('click', () => {
+            document.getElementById('successModal').classList.add('hidden');
+        });
+
+        // 格式化日期时间
+        function formatDateTime(date) {
+            return date.toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+
+
+    </body></html>
